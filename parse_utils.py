@@ -42,13 +42,13 @@ def is_car_damaged(comments):
         is_damaged = True
     return is_damaged
 
-def is_return_ontime(duration):
+def is_return_late(duration):
     time_split = [int(split) for split in duration.split(":")]
     time_diff = datetime.timedelta(hours=time_split[0], minutes=time_split[1], seconds=time_split[2])
     total_hrs = time_diff.total_seconds() / 3600
 
     if total_hrs <= 24:
-        is_ontime = True
+        is_late = False
     else:
-        is_ontime = False
-    return is_ontime
+        is_late = True
+    return is_late

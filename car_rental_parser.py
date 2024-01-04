@@ -48,7 +48,7 @@ def parse_json(events):
             records[record]["session_duration"] = duration
             
             # Determine if arrival was on time
-            records[record]["returned_late"] = utils.is_return_ontime(duration)
+            records[record]["returned_late"] = utils.is_return_late(duration)
             
             # Determine if car was returned damaged
             if e_type == "END":
