@@ -2,14 +2,14 @@ import os
 import json
 import datetime
 
-def validate_file(events_file):
+def validate_file(events_file, logger):
     # Validate file location
     if os.path.isfile(events_file) == False:
-        print("Error: File does not exist")
+        logger.error("File does not exist")
         exit()
     # Validate file name format
     if events_file.endswith(".json") == False:
-        print("Error: Input file format - <events>.json")
+        logger.error("Input file format - <events>.json")
         exit()
 
     else:
@@ -18,7 +18,7 @@ def validate_file(events_file):
             try: 
                 events = json.load(events_data)
             except json.JSONDecodeError as e:
-                print(f"Error: JSON decoding error {e}")
+                logger.error(f"JSON decoding error {e}")
                 exit()
         return events
 

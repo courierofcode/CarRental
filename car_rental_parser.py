@@ -1,11 +1,26 @@
+import os
 import sys
 import json
 import logging
+import datetime
 import parse_utils as utils
 
-def parse_json(events):
-    records = []
+# Initialize logger
+datetime_str = datetime.datetime.now().strftime("%Y-%M-%d-%H-%M-%S")
+log_dir = os.path.join(os.getcwd(), "logs")
+os.makedirs(log_dir, exist_ok=True)
+log_path = os.path.join(log_dir, f"logfile_{datetime_str}.log")
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
+# Create Logger file handler
+file_handler = logging.FileHandler(log_path)
+file_handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+
+def parse_json(events, records):
     for event in events:
         e_id = event["id"]
         e_type = event["type"]
@@ -22,7 +37,8 @@ def parse_json(events):
                 st_tstamp = -1
                 end_tstamp = e_tstamp
             else: # Record type undefined
-                print("Error: Car Event type undefined")
+                logger.error(f"Car event type undefined on: {event}")
+                exit()
             
             records.append({\
                 "session_id": e_id,
@@ -34,12 +50,12 @@ def parse_json(events):
 
         else:
             if e_type == "START":
-                st_tstamp = e_tstamp
-                print(record)
                 records[record]["session_start"] = e_tstamp
             elif e_type == "END":
-                end_tstamp = e_tstamp
                 records[record]["session_end"] = e_tstamp
+            else: # Record type undefined
+                logger.error(f"Car event type undefined on: {event}")
+                exit()
             
             # Calculate Duration
             st_tstamp = records[record]["session_start"]
@@ -54,27 +70,28 @@ def parse_json(events):
             if e_type == "END":
                 records[record]["car_damaged"] = utils.is_car_damaged(e_comments)
 
-    return records
-
 def main():
-    
     # Validate command line arguments
     if len(sys.argv) == 1 or len(sys.argv) > 2:
-        print("Error: Wrong number of arguments")
-        print("Usage: py car_rental_parser.py <events>.json")
+        logger.error("Wrong number of arguments")
+        logger.error("Usage: py car_rental_parser.py <events>.json")
         exit()
 
     if len(sys.argv) == 2:
         # Validate input file
         events_file = str(sys.argv[1])
-        events = utils.validate_file(events_file)
+        events = utils.validate_file(events_file, logger)
+        logger.info(f"Input file ({events_file}) JSON syntax validated")
 
         # Parse Input JSON file
-        records = parse_json(events)
+        records = []
+        parse_json(events, records)
+        logger.info("Event records parsed successfully")
 
         # Write Output JSON file
         with open('output.json', 'w') as f:
-            json.dump(records, f)
+            json.dump(records, f, indent=4)
+            logger.info("Output records file (outputs.json) created")
         
 
 if __name__ == '__main__':
