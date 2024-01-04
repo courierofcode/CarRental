@@ -16,6 +16,7 @@ def validate_file(events_file, logger):
         # Validate file syntax (JSON file for best practice)
         with open(events_file, 'r') as events_data:
             try: 
+                logger.debug("Attempting to load JSON file...")
                 events = json.load(events_data)
             except json.JSONDecodeError as e:
                 logger.error(f"JSON decoding error {e}")

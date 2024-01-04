@@ -85,11 +85,13 @@ def main():
 
         # Parse Input JSON file
         records = []
+        logger.debug("Attempting to parse JSON file...")
         parse_json(events, records)
         logger.info("Event records parsed successfully")
 
         # Write Output JSON file
         with open('output.json', 'w') as f:
+            logger.debug("Attempting to create (output.json) file")
             json.dump(records, f, indent=4)
             logger.info("Output records file (outputs.json) created")
         
