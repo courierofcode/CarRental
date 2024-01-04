@@ -33,8 +33,8 @@ This is a layout of the design process including user stories, features, and req
 - [x] Input File Validation
 - [x] File Error Handling
 - [x] JSON Parsing
-- [ ] Logging
-- [ ] Testing
+- [x] Logging
+- [x] Testing
 
 
 
@@ -52,8 +52,9 @@ These instructions will get the project up and running on your machine for devel
 
 
 ## 🚀 Deployment <a name = "deployment"></a>
-- Source Hosted by GitHub
-- ...
+- Source Hosted by **GitHub**
+- Tested using **pytest**
+- Time-aware **logging**
 
 
 ## ⛏️ Built Using <a name = "built_using"></a>
