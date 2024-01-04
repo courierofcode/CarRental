@@ -22,7 +22,29 @@ def validate_file(events_file):
                 print(f"Error: JSON decoding error {e}")
                 exit()
         return events
-    
+
+
+""" List of dictionaries
+        records = [{
+            "session_id": 
+            "session_start":
+            "session_end":
+            "session_duration":
+            "returned_late": 
+            "car_damaged": 
+            }]
+"""   
+def parse_json():
+    # Search records for event
+    """
+        If record does NOT exist -> Create Record
+        If record exists -> Validate event
+            If event is valid add new event data to record
+                Update Time Entry
+                Calculate Duration
+                Calculate if car was late
+                Calculate if car was damaged
+    """
 
 def main():
     # Validate command line arguments
@@ -36,29 +58,21 @@ def main():
         events_file = str(sys.argv[1])
         events = validate_file(events_file)
 
-        # Parse Input JSON file
-        """
+        """ List of dictionaries
             events = [{
                 "id": 
                 "type":
                 "timestamp":
                 "comments":
                 }]
-            List of dictionaries
         """
+        # Parse Input JSON file
+        records = parse_json(events)
 
         # Write Output JSON file
-        """
-            records = [{
-                "session_id": 
-                "session_start":
-                "session_end":
-                "session_duration":
-                "returned_late": 
-                "car_damaged": 
-                }]
-            List of dictionaries
-        """
+        with open('output.json', 'w') as f:
+            json.dump(records, f)
+        
 
 if __name__ == '__main__':
     main()
