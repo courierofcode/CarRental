@@ -80,8 +80,10 @@ def main():
     if len(sys.argv) == 2:
         # Validate input file
         events_file = str(sys.argv[1])
+        logger.debug(f"Command Run: python car_rental_parser.py {events_file}")
         events = utils.validate_file(events_file, logger)
         logger.info(f"Input file ({events_file}) JSON syntax validated")
+
 
         # Parse Input JSON file
         records = []

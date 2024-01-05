@@ -1,0 +1,7 @@
+2024-01-04 22:25:06,500 - DEBUG - Command Run: python car_rental_parser.py tests\valid_input.json
+2024-01-04 22:25:06,519 - DEBUG - Attempting to load JSON file...
+2024-01-04 22:25:06,520 - INFO - Input file (tests\valid_input.json) JSON syntax validated
+2024-01-04 22:25:06,520 - DEBUG - Attempting to parse JSON file...
+2024-01-04 22:25:06,520 - INFO - Event records parsed successfully
+2024-01-04 22:25:06,522 - DEBUG - Attempting to create (output.json) file
+2024-01-04 22:25:06,522 - INFO - Output records file (outputs.json) created
