@@ -1,6 +1,8 @@
 import pytest
 import sys
-sys.path.append("..")
+import os
+# Navigate to upper directory
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import parse_utils as utils
    
