@@ -6,9 +6,6 @@ __pycache__/
 # VS Code configurations
 .vscode
 
-# Pytest files
-tests/*_test.py
-
 # C extensions
 *.so
 
