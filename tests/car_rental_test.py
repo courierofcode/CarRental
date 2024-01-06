@@ -5,6 +5,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import parse_utils as utils
+import car_rental_parser as cr_parser
    
 @pytest.fixture
 def records():
@@ -46,6 +47,16 @@ def comments():
     value = ["Small dent on passenger door", "Car is missing both front wheels!", ""]
     return value
 
+@pytest.fixture
+def test_dir_path():
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    return test_dir
+
+@pytest.fixture
+def cmd_line_args(monkeypatch, test_dir_path):
+    input_path = os.path.join(test_dir_path, "valid_input.json")
+    monkeypatch.setattr(sys, "argv", ["car_rental_parser.py", input_path])
+
 def test_find_record(records):
     assert utils.find_record(records, "id", "ABC123") != -1
     assert utils.find_record(records, "id", "ABC456") != -1
@@ -66,4 +77,29 @@ def test_is_return_late(times):
     assert utils.is_return_late(times[1][2]) == False
     assert utils.is_return_late(times[2][2]) == True
 
-    
+"""Exit Codes
+     0 - No Error
+    -1 - Command line argv error
+    -2 - JSON file data type error
+"""
+def test_cmd_line(monkeypatch, test_dir_path):
+    input_path = os.path.join(test_dir_path, "invalid_input2.json")
+    monkeypatch.setattr(sys, "argv", ["car_rental_parser.py", input_path, "not_allowed.json"])
+
+    with pytest.raises(SystemExit) as exinfo:
+        cr_parser.main()
+    assert exinfo.value.code == -1
+
+def test_json_dtype(monkeypatch, test_dir_path):
+    input_path = os.path.join(test_dir_path, "invalid_input1.json")
+    monkeypatch.setattr(sys, "argv", ["car_rental_parser.py", input_path])
+
+    with pytest.raises(SystemExit) as exinfo:
+        cr_parser.main()
+    assert exinfo.value.code == -2
+
+
+def test_integration(cmd_line_args):
+    with pytest.raises(SystemExit) as exinfo:
+        cr_parser.main()
+    assert exinfo.value.code == 0   

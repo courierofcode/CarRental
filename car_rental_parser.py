@@ -37,8 +37,8 @@ def parse_json(events, records):
                 st_tstamp = -1
                 end_tstamp = e_tstamp
             else: # Record type undefined
-                logger.error(f"Car event type undefined on: {event}")
-                exit()
+                logger.error(f"Car event type ({e_type}) undefined on: {event}")
+                exit(-2)
             
             records.append({\
                 "session_id": e_id,
@@ -54,8 +54,8 @@ def parse_json(events, records):
             elif e_type == "END":
                 records[record]["session_end"] = e_tstamp
             else: # Record type undefined
-                logger.error(f"Car event type undefined on: {event}")
-                exit()
+                logger.error(f"Car event type ({e_type}) undefined on: {event}")
+                exit(-2)
             
             # Calculate Duration
             st_tstamp = records[record]["session_start"]
@@ -75,7 +75,7 @@ def main():
     if len(sys.argv) == 1 or len(sys.argv) > 2:
         logger.error("Wrong number of arguments")
         logger.error("Usage: py car_rental_parser.py <events>.json")
-        exit()
+        exit(-1)
 
     if len(sys.argv) == 2:
         # Validate input file
@@ -96,7 +96,7 @@ def main():
             logger.debug("Attempting to create (output.json) file")
             json.dump(records, f, indent=4)
             logger.info("Output records file (outputs.json) created")
-        
+    exit(0)        
 
 if __name__ == '__main__':
     main()
